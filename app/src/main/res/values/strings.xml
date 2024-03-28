@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Pick Notes</string>
+    <string name="already_have_an_account">Already have an account?</string>
+    <string name="does_not_have_an_account">Doesn\'t have an account?</string>
+    <string name="fill_the_required_fields">*Fill the required details</string>
+    <string name="welcome">Welcome</string>
+    <string name="welcome_back">Welcome Back!</string>
+    <string name="pick_notes_by_rohit">Pick Notes by Rohit</string>
+    <string name="sign_in">Sign in</string>
+    <string name="sign_up">Sign up</string>
+    <string name="empty_email_error">Email can\'t be blank</string>
+    <string name="create_new_note">Create New Note</string>
+    <string name="edit_note">Edit Note</string>
+    <string name="new_note">New Note</string>
+</resources>
