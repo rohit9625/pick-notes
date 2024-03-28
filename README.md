@@ -1,5 +1,5 @@
 
-# Pick Notes![Logo](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/th5xamgrr6se0x5ro4g6.png)
+# Pick Notes
 
 Pick Notes is an Android application that allows users to perform CRUD (Create, Read, Update, Delete) operations on notes. It provides a simple and intuitive interface for managing personal notes conveniently. The application also includes authentication with client-side validations to ensure secure access to the note management functionality.
 
