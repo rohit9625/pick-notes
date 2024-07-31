@@ -2,7 +2,7 @@ package com.app.picknotes.repository
 
 import com.app.picknotes.models.UserRequest
 import com.app.picknotes.models.UserResponse
-import com.app.picknotes.network.UserApi
+import com.app.picknotes.auth.data.remote.UserApi
 import com.app.picknotes.utils.NetworkResult
 import org.json.JSONObject
 import javax.inject.Inject

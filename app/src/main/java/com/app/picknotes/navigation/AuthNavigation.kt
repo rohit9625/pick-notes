@@ -6,8 +6,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.app.picknotes.Graph
 import com.app.picknotes.screens.auth.AuthScreen
-import com.app.picknotes.screens.auth.SignInScreen
-import com.app.picknotes.screens.auth.SignUpScreen
+import com.app.picknotes.auth.presentation.SignInScreen
+import com.app.picknotes.auth.presentation.SignUpScreen
 
 fun NavGraphBuilder.authNavigation(navController: NavController) {
     navigation(route = Graph.AUTH, startDestination = AuthScreen.SignIn.route) {

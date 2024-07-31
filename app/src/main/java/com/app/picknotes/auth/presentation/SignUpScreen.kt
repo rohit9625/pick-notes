@@ -1,4 +1,4 @@
-package com.app.picknotes.screens.auth
+package com.app.picknotes.auth.presentation
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -22,9 +22,7 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
@@ -45,24 +43,30 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.app.picknotes.R
+import com.app.picknotes.auth.presentation.event.AuthEvent
+import com.app.picknotes.auth.presentation.state.SignUpState
+import com.app.picknotes.auth.presentation.viewmodel.SignUpViewModel
 import com.app.picknotes.screens.TextFieldWithIcons
 import com.app.picknotes.ui.theme.PickNotesTheme
-import com.app.picknotes.viewmodels.AuthViewModel
+
+@Composable
+fun SignUpScreen(navController: NavController) {
+    val viewModel = hiltViewModel<SignUpViewModel>()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    SignUpScreen(
+        state = uiState,
+        onEvent = viewModel::onEvent,
+        navController = navController
+    )
+}
 
 @Composable
 fun SignUpScreen(
-    navController: NavController,
-    authViewModel: AuthViewModel = hiltViewModel<AuthViewModel>()
+    state: SignUpState,
+    onEvent: (AuthEvent)-> Unit,
+    navController: NavController
 ) {
-    val fieldErrors by authViewModel.fieldError.collectAsStateWithLifecycle()
-    val canSubmit by remember {
-        derivedStateOf {
-            fieldErrors.run {
-                !usernameError.successful || !emailError.successful || !passwordError.successful
-            }
-        }
-    }
-
     Box {
         Image(
             painter = painterResource(id = R.drawable.notebook),
@@ -96,7 +100,7 @@ fun SignUpScreen(
                         .fillMaxWidth()
                         .height(4.dp)) {
                         // Show the LinearProgressIndicator only when isLoading is true
-                        if (authViewModel.isLoading) {
+                        if (state.isLoading) {
                             LinearProgressIndicator(
                                 modifier = Modifier.fillMaxWidth(),
                                 color = MaterialTheme.colorScheme.primary // Set the color as needed
@@ -110,39 +114,39 @@ fun SignUpScreen(
                         color = MaterialTheme.colorScheme.primary,
                     )
                     TextFieldWithIcons(
-                        text = authViewModel.username,
+                        text = state.username,
                         label = "Username",
-                        onValueChange = { authViewModel.updateUsername(it) },
+                        onValueChange = { onEvent(AuthEvent.OnUsernameChange(it)) },
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Text,
                             imeAction = ImeAction.Next
                         ),
-                        errorMessage = fieldErrors.usernameError.errorMessage
+                        errorMessage = state.usernameError
                     )
                     TextFieldWithIcons(
-                        text = authViewModel.email,
+                        text = state.email,
                         label = "Email",
-                        onValueChange = { authViewModel.updateEmail(it) },
+                        onValueChange = { onEvent(AuthEvent.OnEmailChange(it)) },
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Email,
                             imeAction = ImeAction.Next
                         ),
-                        errorMessage = fieldErrors.emailError.errorMessage
+                        errorMessage = state.emailError
                     )
 
                     TextFieldWithIcons(
-                        text = authViewModel.password,
+                        text = state.password,
                         label = "Password",
-                        onValueChange = { authViewModel.updatePassword(it) },
+                        onValueChange = { onEvent(AuthEvent.OnPasswordChange(it)) },
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Password,
                             imeAction = ImeAction.Done
                         ),
-                        errorMessage = fieldErrors.passwordError.errorMessage
+                        errorMessage = state.passwordError
                     )
 
                     Text(
-                        text = authViewModel.responseMessage,
+                        text = state.response ?: "",
                         modifier = Modifier
                             .padding(start = 16.dp)
                             .align(Alignment.Start),
@@ -152,15 +156,15 @@ fun SignUpScreen(
 
                     Button(
                         onClick = {
-                            authViewModel.signUp(onSuccess = {
-                                navController.navigate("main"){
-                                    popUpTo(route = "auth"){
-                                        inclusive = true
-                                    }
-                                }
-                            })
+//                            authViewModel.signUp(onSuccess = {
+//                                navController.navigate("main"){
+//                                    popUpTo(route = "auth"){
+//                                        inclusive = true
+//                                    }
+//                                }
+//                            })
                         },
-                        enabled = !canSubmit,
+                        enabled = !state.hasError,
                         colors = ButtonDefaults.buttonColors(
                             containerColor = MaterialTheme.colorScheme.primary
                         ),
@@ -213,6 +217,10 @@ fun SignUpScreen(
 @Composable
 fun SignUpScreenPreview() {
     PickNotesTheme {
-        SignUpScreen(rememberNavController())
+        SignUpScreen(
+            state = SignUpState(),
+            onEvent = {},
+            navController = rememberNavController()
+        )
     }
 }

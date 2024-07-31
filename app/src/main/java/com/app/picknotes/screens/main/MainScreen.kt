@@ -68,7 +68,7 @@ import com.app.picknotes.screens.AppTopBar
 import com.app.picknotes.screens.PopUpDialog
 import com.app.picknotes.ui.theme.PickNotesTheme
 import com.app.picknotes.utils.NetworkResult
-import com.app.picknotes.viewmodels.AuthViewModel
+import com.app.picknotes.auth.presentation.viewmodel.SignInViewModel
 import com.app.picknotes.viewmodels.MainViewModel
 import kotlinx.coroutines.launch
 
@@ -76,7 +76,7 @@ import kotlinx.coroutines.launch
 fun MainScreen(
     navController: NavController,
     mainViewModel: MainViewModel = hiltViewModel<MainViewModel>(),
-    authViewModel: AuthViewModel = hiltViewModel<AuthViewModel>()
+    authViewModel: SignInViewModel = hiltViewModel<SignInViewModel>()
 ) {
     val notesState by mainViewModel.notesState.collectAsStateWithLifecycle()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)

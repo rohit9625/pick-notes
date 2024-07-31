@@ -3,7 +3,7 @@ package com.app.picknotes.di
 import android.content.Context
 import com.app.picknotes.network.AuthInterceptor
 import com.app.picknotes.network.NotesApi
-import com.app.picknotes.network.UserApi
+import com.app.picknotes.auth.data.remote.UserApi
 import com.app.picknotes.utils.Constants.BASE_URL
 import dagger.Module
 import dagger.Provides

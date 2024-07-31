@@ -3,7 +3,6 @@ package com.app.picknotes.navigation
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.app.picknotes.Graph
 import com.app.picknotes.models.Note

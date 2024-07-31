@@ -4,5 +4,5 @@ object Constants {
     const val TAG = "MyNotesApp"
     const val PREF_TOKEN_FILE = "PREF_TOKEN_FILE"
     const val USER_TOKEN = "USER_TOKEN"
-    val BASE_URL = "https://notes-api-mu.vercel.app"
+    const val BASE_URL = "https://notes-api-mu.vercel.app"
 }

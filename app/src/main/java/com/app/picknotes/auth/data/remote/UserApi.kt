@@ -1,4 +1,4 @@
-package com.app.picknotes.network
+package com.app.picknotes.auth.data.remote
 
 import com.app.picknotes.models.UserRequest
 import com.app.picknotes.models.UserResponse
