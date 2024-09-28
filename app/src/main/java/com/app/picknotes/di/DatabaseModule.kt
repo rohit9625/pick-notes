@@ -2,8 +2,8 @@ package com.app.picknotes.di
 
 import android.content.Context
 import androidx.room.Room
-import com.app.picknotes.db.NotesDao
-import com.app.picknotes.db.NotesDatabase
+import com.app.picknotes.notes.data.local.NotesDao
+import com.app.picknotes.notes.data.local.NotesDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,7 +21,7 @@ class DatabaseModule {
             context,
             NotesDatabase::class.java,
             "notes_db"
-        ).build()
+        ).fallbackToDestructiveMigration().build()
     }
 
     @Provides

@@ -1,10 +1,9 @@
-package com.app.picknotes.db
+package com.app.picknotes.notes.data.local
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.app.picknotes.models.NoteResponse
 
-@Database(entities = [NoteResponse::class], version = 1)
+@Database(entities = [NotesEntity::class], version = 2)
 abstract class NotesDatabase: RoomDatabase() {
     abstract fun notesDao(): NotesDao
 }
