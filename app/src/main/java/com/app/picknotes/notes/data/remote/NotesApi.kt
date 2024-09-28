@@ -1,6 +1,6 @@
-package com.app.picknotes.network
+package com.app.picknotes.notes.data.remote
 
-import com.app.picknotes.models.Note
+import com.app.picknotes.notes.domain.Note
 import com.app.picknotes.models.NoteResponse
 import retrofit2.Response
 import retrofit2.http.Body

@@ -22,7 +22,7 @@ fun NavGraphBuilder.authNavigation(navController: NavController) {
             )
         }
         composable(route = AuthScreen.Forgot.route) {
-
+            TODO("Not implemented")
         }
     }
 }

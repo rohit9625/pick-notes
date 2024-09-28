@@ -3,6 +3,7 @@ package com.app.picknotes
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -37,7 +38,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     PickNotesApp(
                         navController = navController,
-                        start = if (tokenManager.getToken() != null) Graph.MAIN else Graph.AUTH
+                        tokenManager = tokenManager
                     )
                 }
             }
@@ -45,9 +46,10 @@ class MainActivity : ComponentActivity() {
     }
 }
 @Composable
-fun PickNotesApp(navController: NavHostController, start: String) {
+fun PickNotesApp(navController: NavHostController, tokenManager: TokenManager) {
+    val startDest = if (tokenManager.getToken() != null) Graph.MAIN else Graph.AUTH
 
-    NavHost(navController = navController, startDestination = start) {
+    NavHost(navController = navController, startDestination = startDest) {
         authNavigation(navController = navController)
 
         mainNavigation(navController = navController)

@@ -5,11 +5,11 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.app.picknotes.Graph
-import com.app.picknotes.models.Note
+import com.app.picknotes.notes.domain.Note
 import com.app.picknotes.screens.main.AboutScreen
 import com.app.picknotes.screens.main.FeedbackScreen
-import com.app.picknotes.screens.main.MainScreen
-import com.app.picknotes.screens.main.NewNoteScreen
+import com.app.picknotes.notes.presentation.MainScreen
+import com.app.picknotes.notes.presentation.NewNoteScreen
 import com.app.picknotes.screens.main.Screen
 
 fun NavGraphBuilder.mainNavigation(navController: NavController) {

@@ -1,4 +1,4 @@
-package com.app.picknotes.network
+package com.app.picknotes.notes.data.remote
 
 import com.app.picknotes.utils.TokenManager
 import okhttp3.Interceptor
