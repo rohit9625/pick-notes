@@ -1,10 +1,15 @@
 package com.app.picknotes.di
 
 import android.content.Context
-import com.app.picknotes.network.AuthInterceptor
-import com.app.picknotes.network.NotesApi
+import com.app.picknotes.notes.data.remote.AuthInterceptor
+import com.app.picknotes.notes.data.remote.NotesApi
 import com.app.picknotes.auth.data.remote.UserApi
+import com.app.picknotes.notes.data.NotesRepositoryImpl
+import com.app.picknotes.notes.data.local.NotesDao
+import com.app.picknotes.notes.data.mapper.NotesMapper
+import com.app.picknotes.notes.domain.NotesRepository
 import com.app.picknotes.utils.Constants.BASE_URL
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,13 +22,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-class NetworkModule {
-    @Provides
-    @Singleton
-    fun provideContext(@ApplicationContext context: Context): Context {
-        return context
-    }
-
+object NetworkModule {
     @Singleton
     @Provides
     fun provideRetrofitBuilder() : Builder {
@@ -53,4 +52,13 @@ class NetworkModule {
             .create(NotesApi::class.java)
     }
 
+    @Provides
+    @Singleton
+    fun provideNotesRepository(
+        notesApi: NotesApi,
+        notesDao: NotesDao,
+        noteMapper: NotesMapper
+    ): NotesRepository {
+        return NotesRepositoryImpl(notesApi, notesDao, noteMapper)
+    }
 }
