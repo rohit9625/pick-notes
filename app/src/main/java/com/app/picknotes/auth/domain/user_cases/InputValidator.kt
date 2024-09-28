@@ -29,7 +29,7 @@ class InputValidator @Inject constructor() {
      *  [username] - Name as string
      *  [Result] - Result object with [Unit] when success and [InputValidationError.UsernameError] when fails
      */
-    fun validateName(username: String): Result<Unit, InputValidationError.UsernameError> {
+    fun validateUsername(username: String): Result<Unit, InputValidationError.UsernameError> {
         return if (username.isBlank()) {
             Result.Error(InputValidationError.UsernameError.USERNAME_MANDATORY)
         }

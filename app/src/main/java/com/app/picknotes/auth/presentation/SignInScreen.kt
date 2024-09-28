@@ -148,13 +148,13 @@ fun SignInScreen(
 
                     Button(
                         onClick = {
-//                            authViewModel.signIn(onSuccess = {
-//                                navController.navigate("main"){
-//                                    popUpTo(route = "auth"){
-//                                        inclusive = true
-//                                    }
-//                                }
-//                            })
+                            onEvent(AuthEvent.OnSubmit {
+                                navController.navigate("main") {
+                                    popUpTo(route = "auth") {
+                                        inclusive = true
+                                    }
+                                }
+                            })
                         },
                         enabled = !state.hasError,
                         colors = ButtonDefaults.buttonColors(

@@ -1,9 +1,6 @@
 package com.app.picknotes.auth.presentation.viewmodel
 
 import android.util.Log
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.picknotes.auth.domain.model.InputValidationError
@@ -11,8 +8,9 @@ import com.app.picknotes.auth.domain.model.Result
 import com.app.picknotes.auth.domain.user_cases.InputValidator
 import com.app.picknotes.auth.presentation.event.AuthEvent
 import com.app.picknotes.auth.presentation.state.SignInState
-import com.app.picknotes.models.UserRequest
-import com.app.picknotes.repository.UserRepository
+import com.app.picknotes.auth.data.UserRepository
+import com.app.picknotes.auth.domain.model.NetworkError
+import com.app.picknotes.auth.presentation.state.toSignIn
 import com.app.picknotes.utils.Constants.TAG
 import com.app.picknotes.utils.NetworkResult
 import com.app.picknotes.utils.TokenManager
@@ -32,20 +30,6 @@ class SignInViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(SignInState())
     val uiState = _uiState.asStateFlow()
 
-    var username by mutableStateOf("")
-         private set
-    var email by mutableStateOf("")
-        private set
-    var password by mutableStateOf("")
-        private set
-
-    var responseMessage by mutableStateOf("")
-        private set
-    var isLoading by mutableStateOf(false)
-        private set
-
-
-
     fun onEvent(e: AuthEvent) {
         when(e) {
             is AuthEvent.OnEmailChange -> {
@@ -61,7 +45,7 @@ class SignInViewModel @Inject constructor(
             is AuthEvent.OnPasswordChange -> {
                 val error = when(val res = validator.validatePassword(e.password)) {
                     is Result.Error -> when(res.error) {
-                        InputValidationError.PasswordError.PASSWORD_MANDATORY -> "Enter a password"
+                        InputValidationError.PasswordError.PASSWORD_MANDATORY -> "Enter your password"
                         InputValidationError.PasswordError.WHITESPACE_NOT_ALLOWED -> "Whitespace not allowed"
                         InputValidationError.PasswordError.PASSWORD_LENGTH -> "Length should be 8-16 characters"
                         InputValidationError.PasswordError.MISSING_ALPHABET -> "Must contain at least 1 alphabet"
@@ -85,7 +69,7 @@ class SignInViewModel @Inject constructor(
                         InputValidationError.GeneralError.INVALID -> null
                     }
                     is Result.Success -> {
-                        loginUser { e.onSuccess() }
+                        signInUser { e.onSuccess() }
                         null
                     }
                 }
@@ -105,32 +89,27 @@ class SignInViewModel @Inject constructor(
         }
     }
 
-    private fun loginUser(onSuccess: ()-> Unit) {
+    private fun signInUser(onSuccess: ()-> Unit) {
         _uiState.update { it.copy(isLoading = true) }
 
         viewModelScope.launch {
             try {
-                val response = userRepository.loginUser(UserRequest(
-                    username = username,
-                    email = email,
-                    password = password
-                ))
-
-
-                if(response is NetworkResult.Success) {
-                    tokenManager.saveToken(response.data!!.token)
-                    onSuccess()
-                    Log.d(TAG, "Success response : ${response.data}")
+                val responseMessage = when(val res = userRepository.loginUser(_uiState.value.toSignIn())) {
+                    is Result.Error -> when(res.error) {
+                        NetworkError.UserError.USER_NOT_EXISTS -> "User not exists"
+                        NetworkError.UserError.INVALID_CREDENTIALS -> "Invalid email or password"
+                        else -> "Please try again later"
+                    }
+                    is Result.Success -> {
+                        tokenManager.saveToken(res.data.token)
+                        onSuccess()
+                        null
+                    }
                 }
-                else if(response is NetworkResult.Error) {
-                    responseMessage = response.message!!
-                    Log.e(TAG, "Error response : ${response.message}")
-                }
-
+                _uiState.update { it.copy(isLoading = false, response = responseMessage) }
             }catch (e: Exception) {
-                Log.e(TAG, "Error : ${e.message}")
-            }finally {
-                isLoading = false
+                Log.e(TAG, "Error occurred while signing-in user", e)
+                _uiState.update { it.copy(isLoading = false, response = "An unexpected error occurred") }
             }
         }
     }

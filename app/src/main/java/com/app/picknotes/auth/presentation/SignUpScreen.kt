@@ -54,11 +54,7 @@ fun SignUpScreen(navController: NavController) {
     val viewModel = hiltViewModel<SignUpViewModel>()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    SignUpScreen(
-        state = uiState,
-        onEvent = viewModel::onEvent,
-        navController = navController
-    )
+    SignUpScreen(state = uiState, onEvent = viewModel::onEvent, navController = navController)
 }
 
 @Composable
@@ -156,13 +152,13 @@ fun SignUpScreen(
 
                     Button(
                         onClick = {
-//                            authViewModel.signUp(onSuccess = {
-//                                navController.navigate("main"){
-//                                    popUpTo(route = "auth"){
-//                                        inclusive = true
-//                                    }
-//                                }
-//                            })
+                            onEvent(AuthEvent.OnSubmit {
+                                navController.navigate("main") {
+                                    popUpTo(route = "auth") {
+                                        inclusive = true
+                                    }
+                                }
+                            })
                         },
                         enabled = !state.hasError,
                         colors = ButtonDefaults.buttonColors(

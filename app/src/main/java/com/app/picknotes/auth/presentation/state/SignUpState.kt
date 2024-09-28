@@ -1,5 +1,7 @@
 package com.app.picknotes.auth.presentation.state
 
+import com.app.picknotes.auth.data.model.SignUpRequest
+
 data class SignUpState(
     val username: String = "",
     val usernameError: String? = null,
@@ -13,3 +15,4 @@ data class SignUpState(
     val hasError: Boolean
         get() = usernameError != null || emailError != null || passwordError != null
 }
+fun SignUpState.toSignUp() = SignUpRequest(username = username, email = email, password = password)
