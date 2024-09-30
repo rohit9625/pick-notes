@@ -2,6 +2,7 @@ package com.app.picknotes.notes.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.app.picknotes.notes.domain.Note
 import com.app.picknotes.notes.domain.use_cases.NotesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,6 +24,10 @@ class NewNoteViewModel @Inject constructor(
             is NewNoteEvent.OnDescriptionChange -> _uiState.update { it.copy(description = e.text) }
             is NewNoteEvent.OnSaveNote -> saveNote()
         }
+    }
+
+    fun initEdit(note: Note) {
+        _uiState.update { it.copy(id = note.id, title = note.title, description = note.description) }
     }
 
     private fun saveNote() {
