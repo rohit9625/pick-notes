@@ -22,7 +22,6 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
@@ -38,24 +37,14 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.app.picknotes.NavRoute
 import com.app.picknotes.R
 import com.app.picknotes.auth.presentation.event.AuthEvent
 import com.app.picknotes.auth.presentation.state.SignUpState
-import com.app.picknotes.auth.presentation.viewmodel.SignUpViewModel
 import com.app.picknotes.screens.TextFieldWithIcons
 import com.app.picknotes.ui.theme.PickNotesTheme
-
-@Composable
-fun SignUpScreen(navController: NavController) {
-    val viewModel = hiltViewModel<SignUpViewModel>()
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-
-    SignUpScreen(state = uiState, onEvent = viewModel::onEvent, navController = navController)
-}
 
 @Composable
 fun SignUpScreen(
@@ -153,8 +142,8 @@ fun SignUpScreen(
                     Button(
                         onClick = {
                             onEvent(AuthEvent.OnSubmit {
-                                navController.navigate("main") {
-                                    popUpTo(route = "auth") {
+                                navController.navigate(NavRoute.HomeScreen) {
+                                    popUpTo(route = NavRoute.SignInScreen) {
                                         inclusive = true
                                     }
                                 }

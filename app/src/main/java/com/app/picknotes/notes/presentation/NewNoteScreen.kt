@@ -20,7 +20,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -34,25 +33,11 @@ import com.app.picknotes.R
 import com.app.picknotes.notes.domain.Note
 import com.app.picknotes.ui.theme.PickNotesTheme
 
-@Composable
-fun NewNoteScreen(navController: NavController, note: Note?) {
-    val viewModel = hiltViewModel<NewNoteViewModel>()
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-
-    NewNoteScreen(
-        uiState = uiState,
-        onEvent = viewModel::onEvent,
-        note = note,
-        navController = navController
-    )
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewNoteScreen(
     uiState: NewNoteState,
     onEvent: (NewNoteEvent) -> Unit,
-    note: Note?,
     navController: NavController
 ) {
 
@@ -75,7 +60,7 @@ fun NewNoteScreen(
                 },
                 title = {
                     Text(
-                        text = stringResource(if (note != null) R.string.edit_note else R.string.create_new_note),
+                        text = stringResource(if(uiState.id != null) R.string.edit_note else R.string.create_new_note),
                         style = MaterialTheme.typography.titleMedium,
                     )
                 },
@@ -154,7 +139,6 @@ fun NewNoteScreenPreview() {
         NewNoteScreen(
             uiState = NewNoteState(),
             onEvent = { },
-            note = null,
             navController = rememberNavController()
         )
     }

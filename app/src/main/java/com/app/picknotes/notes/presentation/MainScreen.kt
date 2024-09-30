@@ -41,28 +41,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.app.picknotes.R
 import com.app.picknotes.models.NoteResponse
-import com.app.picknotes.ui.theme.PickNotesTheme
-import com.app.picknotes.auth.presentation.viewmodel.SignInViewModel
+import com.app.picknotes.navigation.NavRoute
 import com.app.picknotes.notes.data.DummyData
-
-@Composable
-fun MainScreen(navController: NavController) {
-    val viewmodel = hiltViewModel<MainViewModel>()
-    val authViewModel = hiltViewModel<SignInViewModel>()
-
-    val uiState by viewmodel.uiState.collectAsStateWithLifecycle()
-
-    MainScreen(
-        navController = navController,
-        uiState = uiState
-    )
-}
+import com.app.picknotes.ui.theme.PickNotesTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -70,11 +55,7 @@ fun MainScreen(
     uiState: MainUiState,
     navController: NavController
 ) {
-    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-    val scope = rememberCoroutineScope()
     val snackHostState = remember { SnackbarHostState() }
-    val showDialog = remember { mutableStateOf(false) }
-    var noteToDelete by remember { mutableStateOf<NoteResponse?>(null) }
 
     Scaffold(
         snackbarHost = { SnackbarHost(snackHostState) },
@@ -100,11 +81,10 @@ fun MainScreen(
 
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = { navController.navigate("new_note")  }) {
+            FloatingActionButton(onClick = { navController.navigate(NavRoute.NewNoteScreen()) }) {
                 Icon(
                     imageVector = Icons.Rounded.Edit,
                     contentDescription = "New Note",
-
                 )
             }
         }
@@ -156,7 +136,7 @@ fun MainScreen(
                                 }
                             },
                             modifier = Modifier.clickable {
-                                navController.navigate("new_note")
+                                navController.navigate(NavRoute.NewNoteScreen(note))
                             }
                         )
                     }
